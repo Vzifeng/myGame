@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+</head>
+<body>
+    <div id="div1">
+        <p v-if="seen">{{message}}</p>
+        <span v-bind:title="message">悬停鼠标</span>
+    </div>
+    <div id="div2">
+        <ol>
+            <li v-for="tool in tools">
+                {{tool.name}}
+            </li>
+        </ol>
+    </div>
+    <div id="div3">
+        <p>{{haha}}</p>
+        <button v-on:click="reverseMessage">点一下</button>
+    </div>
+    <div id="div4">
+        <p>{{message}}</p>
+        <input v-model="message">
+    </div>
+    <template>
+        <div class="block">
+            <span class="demonstration">默认</span>
+            <el-slider v-model="value1"></el-slider>
+        </div>
+        <div class="block">
+            <span class="demonstration">自定义初始值</span>
+            <el-slider v-model="value2"></el-slider>
+        </div>
+        <div class="block">
+            <span class="demonstration">隐藏 Tooltip</span>
+            <el-slider v-model="value3" :show-tooltip="false"></el-slider>
+        </div>
+        <div class="block">
+            <span class="demonstration">格式化 Tooltip</span>
+            <el-slider v-model="value4" :format-tooltip="formatTooltip"></el-slider>
+        </div>
+        <div class="block">
+            <span class="demonstration">禁用</span>
+            <el-slider v-model="value5" disabled></el-slider>
+        </div>
+    </template>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el:'#div1',
+            data:{
+                message:'hello vue',
+                seen:true
+            }
+        });
+        var ol = new Vue({
+            el:'#div2',
+            data:{
+                tools:[
+                    {name:'张三'},
+                    {name:'历史上'},
+                    {name:'王五'}
+                ]
+            }
+        });
+        var di = new Vue({
+            el:'#div3',
+            data:{
+                haha:'nihaoma!'
+            },
+            methods:{
+                reverseMessage:function () {
+                    this.haha = this.haha.split('').reverse().join('')
+                }
+            }
+        });
+        var model = new Vue({
+            el:'#div4',
+            data:{
+                message:'hello vue'
+            }
+        })
+    </script>
+</body>
+<script>
+    export default {
+        data() {
+            return {
+                value1: 0,
+                value2: 50,
+                value3: 36,
+                value4: 48,
+                value5: 42
+            }
+        },
+        methods: {
+            formatTooltip(val) {
+                return val / 100;
+            }
+        }
+    }
+</script>
+</html>

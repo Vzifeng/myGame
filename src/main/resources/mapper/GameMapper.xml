@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game.dao.GameMapper">
+  <resultMap id="BaseResultMap" type="com.example.game.po.Game">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="game_name" jdbcType="VARCHAR" property="gameName" />
+    <result column="game_company" jdbcType="VARCHAR" property="gameCompany" />
+    <result column="game_publish_time" jdbcType="VARCHAR" property="gamePublishTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, game_name, game_company, game_publish_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from game
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from game
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.game.po.Game" keyProperty="id" useGeneratedKeys="true">
+    insert into game (id, game_name, game_company, 
+      game_publish_time)
+    values (#{id,jdbcType=INTEGER}, #{gameName,jdbcType=VARCHAR}, #{gameCompany,jdbcType=VARCHAR}, 
+      #{gamePublishTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.game.po.Game" keyProperty="id" useGeneratedKeys="true">
+    insert into game
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gameName != null">
+        game_name,
+      </if>
+      <if test="gameCompany != null">
+        game_company,
+      </if>
+      <if test="gamePublishTime != null">
+        game_publish_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gameName != null">
+        #{gameName,jdbcType=VARCHAR},
+      </if>
+      <if test="gameCompany != null">
+        #{gameCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="gamePublishTime != null">
+        #{gamePublishTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.game.po.Game">
+    update game
+    <set>
+      <if test="gameName != null">
+        game_name = #{gameName,jdbcType=VARCHAR},
+      </if>
+      <if test="gameCompany != null">
+        game_company = #{gameCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="gamePublishTime != null">
+        game_publish_time = #{gamePublishTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.game.po.Game">
+    update game
+    set game_name = #{gameName,jdbcType=VARCHAR},
+      game_company = #{gameCompany,jdbcType=VARCHAR},
+      game_publish_time = #{gamePublishTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="gameListPage" parameterType="com.example.game.vo.GameVo" resultType="com.example.game.po.Game">
+      select * from game where 1=1
+      <if test="gameName != null and gameName != ''">
+          and game_name like concat('%',#{gameName},'%')
+      </if>
+      <if test="gameCompany != null and gameCompany != ''">
+          and game_company like concat('%',#{gameCompany},'%')
+      </if>
+  </select>
+  <select id="singlGame" parameterType="integer" resultType="com.example.game.vo.response.ResponseGameVo">
+      select
+         g.id,
+         g.game_name as gameName,
+         g.game_company as gameCompany,
+         g.game_publish_time as gamePublishTime,
+         count(ug.user_id) as people
+      from game g
+      left join user_game ug on ug.game_id = g.id
+      where g.id = #{id}
+  </select>
+
+  <resultMap id="base" type="com.example.game.vo.response.ResponseGameVo">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="game_name" jdbcType="VARCHAR" property="gameName"/>
+    <collection property="gameMaterialList" ofType="com.example.game.po.GameMaterial">
+        <result column="game_material" property="gameMaterial"/>
+        <result column="material_num" property="materialNum"/>
+    </collection>
+  </resultMap>
+  <select id="selectGameByUserId" parameterType="integer" resultMap="base">
+      select
+        g.id,
+        g.game_name,
+        gm.game_material,
+        gm.material_num
+      from game g
+      left join user_game ug on ug.game_id = g.id
+      left join game_material gm on gm.game_id = g.id
+      where ug.user_id = #{userId}
+  </select>
+</mapper>

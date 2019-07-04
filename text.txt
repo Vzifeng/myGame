@@ -1,0 +1,2 @@
+keyProperty="id" useGeneratedKeys="true"
+主要是在主键是自增的情况下，添加成功后可以直接使用主键值，其中keyProperty的值是对象的属性值不是数据库表中的字段名

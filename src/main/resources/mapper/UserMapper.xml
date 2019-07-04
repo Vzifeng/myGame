@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.example.game.po.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_sex" jdbcType="BIT" property="userSex" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_addr" jdbcType="VARCHAR" property="userAddr" />
+    <result column="user_registration_time" jdbcType="VARCHAR" property="userRegistrationTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_name, user_sex, user_phone, user_addr, user_registration_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.game.po.User" keyProperty="id" useGeneratedKeys="true">
+    insert into user (id, user_name, user_sex, 
+      user_phone, user_addr, user_registration_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userSex,jdbcType=BIT}, 
+      #{userPhone,jdbcType=VARCHAR}, #{userAddr,jdbcType=VARCHAR}, #{userRegistrationTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.game.po.User" keyProperty="id" useGeneratedKeys="true">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userSex != null">
+        user_sex,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="userAddr != null">
+        user_addr,
+      </if>
+      <if test="userRegistrationTime != null">
+        user_registration_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null">
+        #{userSex,jdbcType=BIT},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddr != null">
+        #{userAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="userRegistrationTime != null">
+        #{userRegistrationTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.game.po.User">
+    update user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null">
+        user_sex = #{userSex,jdbcType=BIT},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddr != null">
+        user_addr = #{userAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="userRegistrationTime != null">
+        user_registration_time = #{userRegistrationTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.game.po.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=BIT},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_addr = #{userAddr,jdbcType=VARCHAR},
+      user_registration_time = #{userRegistrationTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectUserByPhone" parameterType="string" resultType="com.example.game.vo.RegisterVo">
+      select u.*,up.password
+      from user u
+      left join user_password up on u.id = up.user_id
+      where u.user_phone = #{userPhone}
+  </select>
+
+  <select id="userList" parameterType="com.example.game.vo.RegisterVo" resultType="com.example.game.vo.UserVo">
+      select
+        u.id,
+        u.user_name as userName,
+        u.user_sex as userSex,
+        u.user_phone as userPhone,
+        u.user_addr as userAddr,
+        u.user_registration_time as userRegistrationTime,
+        group_concat(DISTINCT r.role_name order by r.id) as roleName,
+        group_concat(DISTINCT g.game_name order by g.id) as gameName
+      from user u
+      left join user_role ur on ur.user_id = u.id
+      left join role r on r.id = ur.role_id
+      left join user_game ug on ug.user_id = u.id
+      left join game g on g.id = ug.game_id
+      where 1=1
+      <if test="userName != null and userName !=''">
+          and u.user_name like concat('%',#{userName},'%')
+      </if>
+      <if test="userPhone != null and userPhone != ''">
+          and u.user_phone like concat('%',#{userPhone},'#')
+      </if>
+      <if test="userSex != null">
+          and u.user_sex = #{userSex}
+      </if>
+      <if test="roleName != null and roleName != ''">
+          and r.role_name like '%${roleName}%'
+      </if>
+      <if test="gameName != null and gameName != ''">
+          and g.game_name like '%${gameName}%'
+      </if>
+      group by u.id order by u.id
+  </select>
+
+  <select id="selectUserByUserName" parameterType="string" resultType="com.example.game.po.User">
+      select
+        u.id as id,
+        u.user_name as userName,
+        u.user_sex as userSex,
+        u.user_phone as userPhone,
+        u.user_addr as userAddr
+      from user u where user_phone = #{userName}
+  </select>
+</mapper>

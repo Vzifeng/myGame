@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <style>
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+
+            height: auto;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        #mytable{
+            height: 300px;
+            left: 500px;
+        }
+        #gameName{
+            width: 300px;
+            display: inline;
+        }
+        #gameCompany{
+            width: 300px;
+        }
+        .serchName{
+            font-family: 新宋体;
+            font-size: 20px;
+            color: gray;
+
+            position: relative;
+            left: 32px;
+        }
+        .el-input{
+            display: inline;
+            position: relative;
+            left: 32px;
+        }
+        #serchButton{
+            position: relative;
+            left: 50px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container class="el-container">
+        <el-header class="el-header">Header</el-header>
+        <el-main class="el-main">
+            <div style="width: auto">
+                <sapn class="serchName">游戏名称：</sapn><el-input id="gameName" v-model="gameName" placeholder="请输入内容"></el-input>
+                <span class="serchName">公司名称：</span><el-input id="gameCompany" v-model="gameCompany" placeholder="请输入内容"></el-input>
+                <el-button type="primary" id="serchButton" icon="el-icon-search" v-on:click="search">搜索</el-button>
+            </div>
+            <div style="height: 10px"></div>
+            <div style="height: 400px">
+                <div>
+                    <el-table
+                            id="mytable"
+                            :data="tableData"
+                            ref="multipleTable"
+                            tooltip-effect="dark"
+                            border
+                            v-loading="loading"
+                            :default-sort = "{prop: 'id', order: 'ascending'}"
+                            style="width: 50%">
+                        <el-table-column
+                                prop="id"
+                                label="游戏ID"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="gameName"
+                                label="游戏名称"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="gameCompany"
+                                label="游戏公司">
+                        </el-table-column>
+                        <el-table-column
+                                prop="gamePublishTime"
+                                label="发行时间">
+                        </el-table-column>
+                    </el-table>
+                    <div style="height: 10px"></div>
+                    <div align="center">
+                        <el-pagination
+                                :current-page="currentPage"
+                                :current-page.sync="currentPage"
+                                :page-sizes="[10, 20, 30, 50]"
+                                :page-size="pagesize"
+                                layout="prev, pager, next, jumper, sizes,total"
+                                :total="totalCount">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+        </el-main>
+        <el-footer class="el-footer">Footer</el-footer>
+    </el-container>
+</div>
+</body>
+
+<!-- 先引入 Vue -->
+<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    boundDomain();
+    function boundDomain() {
+        new Vue({
+            el: '#app',
+            data:{
+                gameName:"",
+                gameCompany:"",
+                tableData:[],
+                //多选数组
+                multipleSelection: [],
+                //表格数据请求的URL
+                url:'/game/gameListPage',
+                //搜索条件
+                criteria: '',
+                //默认每页数据量
+                pagesize: 10,
+                //默认高亮行数据id
+                highlightId: -1,
+                //默认数据总数
+                totalCount: 1000,
+                //当前页码
+                currentPage: 1,
+                //查询的页码
+                start: 1,
+                //加载渲染
+                loading: false
+            },
+            methods:{
+                loadData:function (criteria,curPage,pageSize) {
+                    var self = this;
+                    self.loading = true;
+                    var sc = searchCondition();
+                    criteria = sc;
+                    self.$http.post(this.url,{parameter:criteria,curPage:curPage, pageSize:pageSize}).then(function(res){
+                        var rData = res.data;
+                        if(rData.ret === 0){
+                            self.tableData = rData.data;
+                            self.totalCount = rData.total;
+                        }
+                        else
+                            self.$message({type:'info',message:"数据异常!",center: true});
+                    },function(res){
+                        self.$message({type:'error',message:'加载数据失败!',center: true});
+                    }).finally(function(){
+                        self.loading = false;
+                    });
+                },
+                search:function () {
+                    var a = searchCondition();
+                    alert(a);
+                }
+            },
+            created:function(){
+                this.loadData(this.criteria, this.currentPage, this.pagesize);
+            }
+        })
+    }
+    /* 搜索条件 */
+    function searchCondition() {
+        var hn = $("#gameName").val();
+        var hn1 = $("#gameCompany").val();
+        var dataArry = [hn,hn1];
+        return dataArry.toString() ;
+    }
+
+</script>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game.dao.ClassMapper">
+    <resultMap id="BaseMapper" type="com.example.game.po.Class">
+        <id column="c_id"  property="cId"/>
+        <result column="c_name" property="cName"/>
+        <collection property="studentList" javaType="ArrayList" ofType="com.example.game.po.Student">
+           <id column="s_id" property="sId"/>
+            <result column="s_name" property="sName"/>
+            <result column="s_addr" property="sAddr"/>
+        </collection>
+    </resultMap>
+    <resultMap id="Base" type="com.example.game.po.Class">
+        <id column="c_id"  property="cId"/>
+        <result column="c_name" property="cName"/>
+    </resultMap>
+
+    <select id="classList" resultMap="BaseMapper">
+        select
+          c.c_id,
+          c.c_name,
+          s.s_id,
+          s.s_name,
+          s.s_addr
+        from class c,student s
+        where s.c_id = c.c_id
+    </select>
+
+    <select id="classList1" resultMap="Base">
+        select
+          c.c_id as cId,
+          c.c_name as cName
+        from class c
+    </select>
+
+</mapper>

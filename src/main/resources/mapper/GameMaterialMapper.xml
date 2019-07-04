@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.game.dao.GameMaterialMapper">
+  <resultMap id="BaseResultMap" type="com.example.game.po.GameMaterial">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="game_material" jdbcType="VARCHAR" property="gameMaterial" />
+    <result column="material_num" jdbcType="INTEGER" property="materialNum" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="game_id" jdbcType="INTEGER" property="gameId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, game_material, material_num, user_id,game_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from game_material
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from game_material
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.game.po.GameMaterial" keyProperty="id" useGeneratedKeys="true">
+    insert into game_material (id, game_material, material_num, 
+      user_id,game_id)
+    values (#{id,jdbcType=INTEGER}, #{gameMaterial,jdbcType=VARCHAR}, #{materialNum,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER},#{GameId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.game.po.GameMaterial" keyProperty="id" useGeneratedKeys="true">
+    insert into game_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gameMaterial != null">
+        game_material,
+      </if>
+      <if test="materialNum != null">
+        material_num,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="gameId != null">
+        game_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gameMaterial != null">
+        #{gameMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null">
+        #{materialNum,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="gameId != null">
+        #{gameId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.game.po.GameMaterial">
+    update game_material
+    <set>
+      <if test="gameMaterial != null">
+        game_material = #{gameMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null">
+        material_num = #{materialNum,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="gameId != null">
+        user_id = #{gameId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.game.po.GameMaterial">
+    update game_material
+    set game_material = #{gameMaterial,jdbcType=VARCHAR},
+      material_num = #{materialNum,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      game_id = #{gameId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <insert id="addMaterial" parameterType="com.example.game.vo.MaterialVo" keyProperty="id" useGeneratedKeys="true">
+    insert into game_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gameMaterial != null">
+        game_material,
+      </if>
+      <if test="materialNum != null">
+        material_num,
+      </if>
+      <if test="gameId != null">
+        game_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gameMaterial != null">
+        #{gameMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null">
+        #{materialNum,jdbcType=INTEGER},
+      </if>
+      <if test="gameId != null">
+        #{gameId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteMaterial" parameterType="map">
+      delete from game_material
+      where id in
+      <foreach collection="array" item="item" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+  </delete>
+
+  <select id="materialList" parameterType="com.example.game.vo.MaterialVo" resultType="com.example.game.vo.response.ResponseMaterialVo">
+      select
+        gm.id as id,
+        gm.game_material as gameMaterial,
+        gm.material_num as materialNum,
+        gm.game_id as gameId,
+        g.game_name as gameName
+      from game_material gm
+      left join game g on gm.game_id = g.id
+      where 1=1
+      <if test="gameMaterial != null and gameMaterial != ''">
+        and gm.game_material like CONCAT('%',{gameMaterial},'%')
+      </if>
+      <if test="gameId != null">
+        and gm.game_id = #{gameId}
+      </if>
+      order by gm.id asc
+  </select>
+
+  <select id="detailMaterial" parameterType="int" resultType="com.example.game.vo.response.ResponseMaterialVo">
+    select
+    gm.id as id,
+    gm.game_material as gameMaterial,
+    gm.material_num as materialNum,
+    gm.game_id as gameId,
+    g.game_name as gameName
+    from game_material gm
+    left join game g on gm.game_id = g.id
+    where gm.id = #{materialId}
+  </select>
+</mapper>
