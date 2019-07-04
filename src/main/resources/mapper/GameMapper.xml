@@ -81,7 +81,12 @@
   </update>
 
   <select id="gameListPage" parameterType="com.example.game.vo.GameVo" resultType="com.example.game.po.Game">
-      select * from game where 1=1
+      select
+        id,
+        game_name as gameName,
+        game_company as gameCompany,
+        game_publish_time as gamePublishTime
+      from game where 1=1
       <if test="gameName != null and gameName != ''">
           and game_name like concat('%',#{gameName},'%')
       </if>

@@ -37,14 +37,19 @@ public class GameController extends BaseController {
     //查询游戏列表
     @RequestMapping(value = "/gameListPage",method = RequestMethod.POST)
     @ResponseBody
-    public CommonResponse gameListPage(@RequestParam(required = false) String[] parameter,
-                                       @RequestParam(required = true) Integer curPage,
-                                       @RequestParam(required = true) Integer pageSiz){
+    public CommonResponse gameListPage(@RequestBody GameVo gameVo){
         /*@RequestParam(required = false) String[] parameter,
     @RequestParam(required = true) Integer curPage,
     @RequestParam(required = true) Integer pageSize*/
-        GameVo gameVo = new GameVo();
-        Pager pager = gameService.gameListPage(gameVo);
+        //GameVo gameVo = new GameVo();
+        /*gameVo.setGameName(parameter[0]);
+        gameVo.setGameCompany(parameter[1]);*/
+        Pager pager = null;
+        try {
+            pager = gameService.gameListPage(gameVo);
+        } catch (Exception e) {
+            LOGGER.error("错误",e);
+        }
         return CommonResponse.create(pager);
     }
     //查询单个游戏

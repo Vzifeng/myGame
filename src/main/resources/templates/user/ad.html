@@ -29,28 +29,24 @@
             left: 500px;
         }
         #gameName{
-            width: 300px;
-            display: inline;
+            width: 270px;
+            display: inline-block;
+
         }
         #gameCompany{
-            width: 300px;
+            width: 270px;
+            display: inline-block;
         }
         .serchName{
             font-family: 新宋体;
             font-size: 20px;
             color: gray;
-
-            position: relative;
-            left: 32px;
-        }
-        .el-input{
-            display: inline;
-            position: relative;
-            left: 32px;
+            margin-left: 30px;
         }
         #serchButton{
+            display: inline-block;
             position: relative;
-            left: 50px;
+            left: 30px;
         }
     </style>
 </head>
@@ -60,9 +56,17 @@
         <el-header class="el-header">Header</el-header>
         <el-main class="el-main">
             <div style="width: auto">
-                <sapn class="serchName">游戏名称：</sapn><el-input id="gameName" v-model="gameName" placeholder="请输入内容"></el-input>
-                <span class="serchName">公司名称：</span><el-input id="gameCompany" v-model="gameCompany" placeholder="请输入内容"></el-input>
-                <el-button type="primary" id="serchButton" icon="el-icon-search" v-on:click="search">搜索</el-button>
+                <sapn class="serchName">游戏名称：</sapn>
+                <div id="gameName">
+                    <el-input  v-model="gameName" id="gameNameValue" placeholder="请输入内容"></el-input>
+                </div>
+                <span class="serchName">公司名称：</span>
+                <div id="gameCompany">
+                    <el-input  v-model="gameCompany" id="gameCompanyValue" placeholder="请输入内容"></el-input>
+                </div>
+                <div id="serchButton">
+                    <el-button type="primary" icon="el-icon-search" v-on:click="search">搜索</el-button>
+                </div>
             </div>
             <div style="height: 10px"></div>
             <div style="height: 400px">
@@ -98,9 +102,11 @@
                     <div style="height: 10px"></div>
                     <div align="center">
                         <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
                                 :current-page="currentPage"
                                 :current-page.sync="currentPage"
-                                :page-sizes="[10, 20, 30, 50]"
+                                :page-sizes="[2, 5, 10, 20]"
                                 :page-size="pagesize"
                                 layout="prev, pager, next, jumper, sizes,total"
                                 :total="totalCount">
@@ -116,6 +122,7 @@
 
 <!-- 先引入 Vue -->
 <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
@@ -151,12 +158,14 @@
                     var self = this;
                     self.loading = true;
                     var sc = searchCondition();
+                    var gameName = $("#gameNameValue").val();
+                    var gameCompany = $("#gameCompanyValue").val();
                     criteria = sc;
-                    self.$http.post(this.url,{parameter:criteria,curPage:curPage, pageSize:pageSize}).then(function(res){
+                   self.$http.post(this.url,{gameName:gameName,gameCompany:gameCompany,curPage:curPage, pageSize:pageSize}).then(function(res){
                         var rData = res.data;
-                        if(rData.ret === 0){
-                            self.tableData = rData.data;
-                            self.totalCount = rData.total;
+                        if(rData.status === 'success'){
+                            self.tableData = rData.data.list;
+                            self.totalCount = rData.data.totalRow;
                         }
                         else
                             self.$message({type:'info',message:"数据异常!",center: true});
@@ -166,9 +175,18 @@
                         self.loading = false;
                     });
                 },
+                //每页显示数据量变更
+                handleSizeChange: function(val) {
+                    this.pagesize = val;
+                    this.loadData(this.criteria, this.currentPage, this.pagesize);
+                },
+                //每页显示数据量变更
+                handleCurrentChange: function(val) {
+                    this.currentPage = val;
+                    this.loadData(this.criteria, this.currentPage, this.pagesize);
+                },
                 search:function () {
-                    var a = searchCondition();
-                    alert(a);
+                    this.loadData(this.criteria, this.currentPage, this.pagesize);
                 }
             },
             created:function(){
@@ -181,7 +199,7 @@
         var hn = $("#gameName").val();
         var hn1 = $("#gameCompany").val();
         var dataArry = [hn,hn1];
-        return dataArry.toString() ;
+        return dataArry.toString();
     }
 
 </script>

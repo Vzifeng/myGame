@@ -39,13 +39,13 @@ public class LoginController {
     @RequestMapping(value = "/add")
     public String add(){
         SessionUtil.getUser();
-        return "/user/useradd";
+        return "/user/ad";
     }
 
     @RequestMapping(value = "/update")
     public String update(){
         SessionUtil.getUser();
-        return "/user/userupdate";
+        return "/user/ad";
     }
 
     @RequestMapping(value = "/unauthor")
