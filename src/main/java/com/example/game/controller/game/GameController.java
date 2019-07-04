@@ -56,10 +56,7 @@ public class GameController extends BaseController {
     }
 
 
-    //测试
-    //ceshi
-    //提交啊
-    //再试一次
+   
 
 
 }
