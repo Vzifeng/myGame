@@ -54,9 +54,4 @@ public class GameController extends BaseController {
         ResponseGameVo responseGameVo = gameService.singlGame(id);
         return CommonResponse.create(responseGameVo);
     }
-
-
-   
-
-
 }
