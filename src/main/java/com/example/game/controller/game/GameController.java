@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @ Author   ：yangyunlong.
  * @ Date     ：Created in 11:27 2019/2/19
@@ -38,12 +40,6 @@ public class GameController extends BaseController {
     @RequestMapping(value = "/gameListPage",method = RequestMethod.POST)
     @ResponseBody
     public CommonResponse gameListPage(@RequestBody GameVo gameVo){
-        /*@RequestParam(required = false) String[] parameter,
-    @RequestParam(required = true) Integer curPage,
-    @RequestParam(required = true) Integer pageSize*/
-        //GameVo gameVo = new GameVo();
-        /*gameVo.setGameName(parameter[0]);
-        gameVo.setGameCompany(parameter[1]);*/
         Pager pager = null;
         try {
             pager = gameService.gameListPage(gameVo);
@@ -58,5 +54,12 @@ public class GameController extends BaseController {
     public CommonResponse singlGame(@RequestParam Integer id) throws BusnessException {
         ResponseGameVo responseGameVo = gameService.singlGame(id);
         return CommonResponse.create(responseGameVo);
+    }
+
+    @RequestMapping(value = "/deleteGameById",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResponse deleteGameById(@RequestParam(value = "ids") String ids) throws BusnessException {
+        Map<String, Object>  map = gameService.deleteGameById(ids);
+        return CommonResponse.create(map);
     }
 }

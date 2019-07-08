@@ -2,9 +2,12 @@ package com.example.game.service.impl;
 
 import com.example.game.common.Pager;
 import com.example.game.dao.GameMapper;
+import com.example.game.dao.GameMaterialMapper;
+import com.example.game.dao.UserGameMapper;
 import com.example.game.error.BusinessErrorEnum;
 import com.example.game.error.BusnessException;
 import com.example.game.po.Game;
+import com.example.game.po.UserGameKey;
 import com.example.game.service.GameService;
 import com.example.game.validator.ValidationResult;
 import com.example.game.validator.ValidatorImpl;
@@ -19,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -33,6 +39,12 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     GameMapper gameMapper;
+
+    @Autowired
+    GameMaterialMapper gameMaterialMapper;
+
+    @Autowired
+    UserGameMapper userGameMapper;
 
     @Autowired
     ValidatorImpl validator;
@@ -83,5 +95,36 @@ public class GameServiceImpl implements GameService {
             LOGGER.error("查询单款游戏信息失败",e);
         }
         return responseGameVo;
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Object> deleteGameById(String ids) throws BusnessException {
+        String [] id = ids.split(",",0);
+        Integer num = 0;
+        StringBuffer stringBuffer = new StringBuffer();
+        Map<String,Object> map = new HashMap <>();
+        for (int i=0;i<id.length;i++){
+            List<UserGameKey> list = userGameMapper.selectByGameId(Integer.valueOf(id[i]));
+            if (list.size()>0){
+                try {
+                    stringBuffer.append("{游戏id:"+id[i]+",该游戏还有用户,无法删除}"+",");
+                } catch (Exception e) {
+                    LOGGER.error("失败",e);
+                }
+                continue;
+            }
+            try {
+                gameMapper.deleteByPrimaryKey(Integer.valueOf(id[i]));
+                gameMaterialMapper.deleteMaterialByGameId(Integer.valueOf(id[i]));
+
+            } catch (NumberFormatException e) {
+                LOGGER.error("删除游戏失败",e);
+            }
+            num++;
+        }
+        map.put("deleteNum",num);
+        map.put("errorMsg",stringBuffer.substring(0,stringBuffer.length()-1));
+        return map;
     }
 }

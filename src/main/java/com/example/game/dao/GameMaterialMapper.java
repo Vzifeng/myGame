@@ -26,4 +26,6 @@ public interface GameMaterialMapper {
     List<ResponseMaterialVo> materialList(MaterialVo materialVo);
 
     ResponseMaterialVo detailMaterial(Integer materialId);
+
+    int deleteMaterialByGameId(Integer gameId);
 }

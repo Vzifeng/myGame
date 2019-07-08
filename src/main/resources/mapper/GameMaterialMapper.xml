@@ -161,4 +161,8 @@
     left join game g on gm.game_id = g.id
     where gm.id = #{materialId}
   </select>
+
+  <delete id="deleteMaterialByGameId" parameterType="int">
+      delete from game_material gm where gm.game_id = #{gameId}
+  </delete>
 </mapper>

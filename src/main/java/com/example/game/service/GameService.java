@@ -5,6 +5,8 @@ import com.example.game.error.BusnessException;
 import com.example.game.vo.GameVo;
 import com.example.game.vo.response.ResponseGameVo;
 
+import java.util.Map;
+
 /**
  * @ Author   ：yangyunlong.
  * @ Date     ：Created in 9:16 2019/6/21/0021
@@ -16,4 +18,6 @@ public interface GameService {
     Pager gameListPage(GameVo gameVo);
 
     ResponseGameVo singlGame(Integer id) throws BusnessException;
+
+    Map<String, Object> deleteGameById(String ids) throws BusnessException;
 }

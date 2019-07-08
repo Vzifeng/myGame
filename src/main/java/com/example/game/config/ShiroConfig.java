@@ -58,9 +58,11 @@ public class ShiroConfig {
         Map<String,String> filterMap = new LinkedHashMap<String,String>();
         filterMap.put("/add","authc");
         filterMap.put("/update","authc");
+        filterMap.put("/testThymeleaf","authc");
         //授权过滤，授权拦截后，会跳转到一个未授权页面
         filterMap.put("/update","perms[update]");
         filterMap.put("/add","perms[insert]");
+        filterMap.put("/testThymeleaf","perms[update]");
         //跳转到登陆页面
         shiroFilterFactoryBean.setLoginUrl("/getlogin");
         //设置未授权提示页面

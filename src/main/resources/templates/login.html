@@ -3,26 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>登录页面</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <style type="text/css">
+        body{
+            width: 99%;
+            height: 100%;
+            background-image: url("static/picture/login.jpg");
+
+        }
         #login{
             width: 500px;
-            height: 500px;
+            height: 300px;
             background-color: bisque;
             margin-left: 700px;
+            position: absolute;
         }
         #title{
             margin-left: 880px;
+        }
+        .mySpan1{
+            font-size: 20px;
+            font-family: 新宋体;
+            color: gray;
+            display: inline-block;
+            line-height: 38px;
+            position: absolute;
+            left: 50px;
+        }
+        #name{
+            width: 300px;
+            display: inline-block;
+            position: relative;
+            left: 140px;
+        }
+        #password{
+            width: 300px;
+            display: inline-block;
+            position: relative;
+            left: 140px;
+        }
+        #loginButton{
+            width: 50px;
+            position: relative;
+            left: 370px;
+            top: 20px;
         }
     </style>
 </head>
 <body>
     <h1 id="title">XXX系统</h1>
-    <p th:text="${msg}" style="color: red"></p>
     <div id="login">
+        <div style="height: 50px"></div>
+        <p th:text="${msg}" style="color: red"></p>
         <form method="post" action="login">
-            用户名：<input name="name" type="text"/><br/>
+            <div id="nameDiv">
+                <span class="mySpan1">用户名:</span>
+                <el-input id="name" v-model="name" placeholder="请输入账号"></el-input>
+            </div>
             <div style="height: 10px"></div>
-            密&nbsp;&nbsp; 码：<input type="password" name="password"/><br>
+            <div id="passwordDiv">
+                <span class="mySpan1">密&nbsp;码：</span>
+                <el-input id="password" type="password" v-model="password" placeholder="请输入密码"></el-input>
+            </div>
+            <div style="height: 10px"></div>
             <div style="height: 10px"></div>
             <!--<div>
                 &lt;!&ndash; <img alt="这是图片" src="/img/001.png"/> &ndash;&gt;
@@ -30,10 +75,43 @@
             </div>
             <div style="height: 10px"></div>
             <input type="text" name="vrifyCode" />-->
-            <input type="submit" value="登录"/>
+            <div id="loginButton">
+                <el-button type="primary" v-on:click="onSubmit">登录</el-button>
+            </div>
+
         </form>
     </div>
-
-    <h3 th:text="${info}"></h3>
 </body>
+<!-- 先引入 Vue -->
+<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.9.2/locale/fi.min.js"></script>
+<script>
+    boundDomain();
+    function boundDomain() {
+        new Vue({
+            el:"#login",
+            data:{
+                name:'',
+                password:''
+            },
+        methods:{
+            onSubmit:function () {
+                var self = this;
+                var name = $("#name").val();
+                var password = $("#password").val();
+                self.$http.post("/login",{name:name,password:password}).then(function (res) {
+                    if (res.status == 200){
+                        window.location.href = "testThymeleaf";
+                    }
+                },function (res) {
+                    self.$message({type:'error',message:'密码或者账号错误!',center: true});
+                })
+            }
+        }
+        })
+    }
+</script>
 </html>

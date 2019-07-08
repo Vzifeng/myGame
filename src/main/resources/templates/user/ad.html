@@ -48,6 +48,11 @@
             position: relative;
             left: 30px;
         }
+        #buttons{
+            width: 400px;
+            position: relative;
+            left: 500px;
+        }
     </style>
 </head>
 <body>
@@ -69,6 +74,12 @@
                 </div>
             </div>
             <div style="height: 10px"></div>
+            <div id="buttons">
+                <el-button type="primary" icon="el-icon-insert">新增</el-button>
+                <el-button type="primary" icon="el-icon-update">修改</el-button>
+                <el-button type="primary" icon="el-icon-delete" @click="deletes">删除</el-button>
+            </div>
+            <div style="height: 10px"></div>
             <div style="height: 400px">
                 <div>
                     <el-table
@@ -79,7 +90,13 @@
                             border
                             v-loading="loading"
                             :default-sort = "{prop: 'id', order: 'ascending'}"
+                            @row-click="handleclick"
+                            @selection-change="handleSelectionChange"
                             style="width: 50%">
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
                         <el-table-column
                                 prop="id"
                                 label="游戏ID"
@@ -125,6 +142,7 @@
 <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.9.2/locale/fi.min.js"></script>
 <script>
     boundDomain();
     function boundDomain() {
@@ -175,6 +193,14 @@
                         self.loading = false;
                     });
                 },
+                //多选响应
+                handleSelectionChange: function(val) {
+                    this.multipleSelection = val;
+                },
+                //点击行响应
+                handleclick: function(row, event, column){
+                    this.highlightId = row.id;
+                },
                 //每页显示数据量变更
                 handleSizeChange: function(val) {
                     this.pagesize = val;
@@ -187,6 +213,38 @@
                 },
                 search:function () {
                     this.loadData(this.criteria, this.currentPage, this.pagesize);
+                },
+                deletes:function () {
+                    var self =this;
+                    if(self.multipleSelection.length==0){
+                        this.$notify.info({
+                            title: '提示',
+                            message: '请先选择至少一条数据!'
+                        });
+                        return;
+                    }
+                    self.$confirm('此操作将永久删除 ' + self.multipleSelection.length + ' 条数据, 是否继续?', '警告', {
+                        type: 'warning',
+                        center: true
+                    }).then((function () {
+                        var array = [];
+                        self.multipleSelection.forEach(function(item){
+                            array.push(item.id);
+                        });
+                        self.$http.post("/game/deleteGameById",{"ids":array.toString()},{emulateJSON: true}).then(function(res){
+                            var rData = res.data;
+                            if (rData.data.deleteNum == 0){
+                                self.$message({type:'error',message:rData.data.errorMsg,center: true});
+                            }else {
+                                self.$message({type:'success',message:'已删除 ' + rData.data.deleteNum + ' 条数据',center: true});
+                            }
+                            self.loadData(self.criteria, self.currentPage, self.pagesize);
+                        },function(res){
+                            self.$message({type:'error',message:'删除失败!',center: true});
+                        });
+                    })).catch((function () {
+                        self.$message({type:'info',message:'已取消删除操作!',center: true});
+                    }));
                 }
             },
             created:function(){

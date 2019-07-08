@@ -16,6 +16,7 @@ public enum BusinessErrorEnum implements CommonError {
 
 
     GAME_NOT_EXIST(300001,"游戏不存在"),
+    COULD_NOT_DELETE_GAME(300002,"该游戏无法删除"),
 
     ;
 
