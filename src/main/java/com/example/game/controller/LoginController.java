@@ -19,8 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,7 +41,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/testThymeleaf",method = RequestMethod.GET)
+    @RequestMapping(value = "/testThymeleaf")
     public String testThymeleaf(Model model){
         model.addAttribute("haha","shiro_test");
         return "test";
@@ -67,13 +72,13 @@ public class LoginController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(HttpServletRequest httpServletRequest,
-                                @RequestBody Map<String,Object> param,Model model) throws BusnessException {
+                                String name,String password,RedirectAttributes redirectAttributes) throws BusnessException {
         /**
          * 使用shrio编写认证操作
          */
         //获取subject
-        String name = (String) param.get("name");
-        String password = (String) param.get("password");
+       /* String name = (String) param.get("name");
+        String password = (String) param.get("password");*/
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(name,password);
 
@@ -88,16 +93,42 @@ public class LoginController {
                 subject.login(token);
                 //登陆成功
                 return "redirect:/testThymeleaf";
-            } catch (UnknownAccountException e) {
-                //用户名不存在
-                model.addAttribute("msg","用户名不存在");
-                return "login";
-            }catch (IncorrectCredentialsException e){
-                //密码错误
-                model.addAttribute("msg","密码错误");
-                return "login";
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("msg","用户名或者密码错误");
+                return "redirect:/getlogin";
             }
        /* }*/
+    }
+
+    public static void main(String[] args) {
+        Map<String,Object> map1 = new HashMap <>();
+        Map<String,Object> map2 = new HashMap <>();
+        map1.put("first","第一");
+        map1.put("secon","第二");
+        map2.put("third","第三");
+        map2.put("third","第四");
+        List<String> ids = new ArrayList <>();
+        for (String str : ids){
+            System.out.println(str+"sssssssssssssssss");
+        }
+
+        ArrayList<String> listA= new ArrayList<String>();
+        listA.add("Tom");
+        ArrayList<String> listB= new ArrayList<String>();
+        listB.add("Tom");
+        //若listA和listB中有相同元素，则listA中保留相同元素，反之listA为空
+        listA.retainAll(listB);
+        if(listA.size()>0){
+            System.out.println("这两个集合有相同的交集");
+        }else{
+            System.out.println("这两个集合没有相同的交集");
+        }
+
+        map2.putAll(map1);
+        for (Map.Entry<String,Object> entry : map2.entrySet()){
+            System.out.println("key:"+entry.getKey()+" and value:"+entry.getValue());
+        }
+
     }
 
 }

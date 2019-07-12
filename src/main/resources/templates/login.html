@@ -58,7 +58,7 @@
         <div style="height: 50px"></div>
         <p th:text="${msg}" style="color: red"></p>
         <form method="post" action="login">
-            <div id="nameDiv">
+            <!--<div id="nameDiv">
                 <span class="mySpan1">用户名:</span>
                 <el-input id="name" v-model="name" placeholder="请输入账号"></el-input>
             </div>
@@ -69,15 +69,27 @@
             </div>
             <div style="height: 10px"></div>
             <div style="height: 10px"></div>
-            <!--<div>
+            &lt;!&ndash;<div>
                 &lt;!&ndash; <img alt="这是图片" src="/img/001.png"/> &ndash;&gt;
                 <img alt="验证码" onclick = "this.src='/defaultKaptcha?d='+new Date()*1" src="/defaultKaptcha" />
             </div>
             <div style="height: 10px"></div>
-            <input type="text" name="vrifyCode" />-->
+            <input type="text" name="vrifyCode" />&ndash;&gt;
             <div id="loginButton">
-                <el-button type="primary" v-on:click="onSubmit">登录</el-button>
-            </div>
+                &lt;!&ndash;<el-button type="primary" v-on:click="onSubmit">登录</el-button>&ndash;&gt;
+               <input type="submit" name="登陆">
+            </div>-->
+            用户名：<input name="name" type="text"/><br/>
+            <div style="height: 10px"></div>
+            密&nbsp;&nbsp; 码：<input type="password" name="password"/><br>
+            <div style="height: 10px"></div>
+            <!--<div>
+                &lt;!&ndash; <img alt="这是图片" src="/img/001.png"/> &ndash;&gt;
+                <img alt="验证码" onclick = "this.src='/defaultKaptcha?d='+new Date()*1" src="/defaultKaptcha" />
+            </div>-->
+            <div style="height: 10px"></div>
+            <!--<input type="text" name="vrifyCode" />-->
+            <input type="submit" name="登陆"/>
 
         </form>
     </div>
@@ -88,7 +100,7 @@
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.9.2/locale/fi.min.js"></script>
-<script>
+<!--<script>
     boundDomain();
     function boundDomain() {
         new Vue({
@@ -113,5 +125,5 @@
         }
         })
     }
-</script>
+</script>-->
 </html>

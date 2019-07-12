@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ Author   ：yangyunlong.
@@ -20,10 +21,11 @@ public class ClassController {
 
     @Autowired
     ClassService classService;
+
     @RequestMapping(value = "/class")
     @ResponseBody
     public CommonResponse classList(){
-        List<Class> list = classService.classList();
+        List<Map<String,Object>> list = classService.classList();
         return CommonResponse.create(list);
     }
 }

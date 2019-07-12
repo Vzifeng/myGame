@@ -32,11 +32,7 @@ public class UserContoller extends BaseController {
     @RequestMapping(value = "/userRegister",method = RequestMethod.POST)
     @ResponseBody
     public CommonResponse userRegister(@RequestBody RegisterVo registerVo) throws BusnessException {
-        try {
-            userService.userRegister(registerVo);
-        } catch (BusnessException e) {
-            LOGGER.error("注册失败",e);
-        }
+        userService.userRegister(registerVo);
         return CommonResponse.create("注册成功");
     }
 
@@ -44,11 +40,7 @@ public class UserContoller extends BaseController {
     @RequestMapping(value = "/logIn",method = RequestMethod.POST)
     @ResponseBody
     public CommonResponse logIn(@RequestBody RegisterVo registerVo) throws BusnessException {
-        try {
-            userService.logIn(registerVo);
-        } catch (BusnessException e) {
-            LOGGER.error("登录失败",e);
-        }
+        userService.logIn(registerVo);
         return CommonResponse.create("登录成功");
     }
 

@@ -19,10 +19,16 @@ public class ClassServiceImpl implements ClassService {
     @Autowired
     ClassMapper classMapper;
     @Override
-    public List<Class> classList() {
+    public List<Map<String,Object>> classList() {
         List<Class> list = classMapper.classList();
 
         List<Class> list1 = classMapper.classList1();
-        return list;
+
+        List<Map<String,Object>> list2 = classMapper.classList2();
+        for (Map<String,Object> map : list2)
+            for (Map.Entry <String, Object> entry : map.entrySet()) {
+                System.out.println("key:"+entry.getKey()+" and value:"+entry.getValue());
+        }
+        return list2;
     }
 }

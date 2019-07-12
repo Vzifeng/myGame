@@ -3,6 +3,7 @@ package com.example.game.service;
 import com.example.game.po.Class;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ Author   ：yangyunlong.
@@ -10,5 +11,5 @@ import java.util.List;
  * @Version ： $version$
  */
 public interface ClassService {
-    List<Class> classList();
+    List<Map<String,Object>> classList();
 }

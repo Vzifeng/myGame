@@ -14,4 +14,6 @@ public interface ClassMapper {
     List<Class> classList();
 
     List<Class> classList1();
+
+    List<Map<String,Object>> classList2();
 }
