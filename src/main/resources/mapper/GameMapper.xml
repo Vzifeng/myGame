@@ -125,4 +125,14 @@
       left join game_material gm on gm.game_id = g.id
       where ug.user_id = #{userId}
   </select>
+
+  <select id="testDataSource" resultType="map">
+      SELECT * FROM produce_info limit 6
+  </select>
+
+  <select id="testDataSource2" resultType="com.example.game.po.Game">
+      select
+        id,game_name,game_company,game_publish_time
+      from game
+  </select>
 </mapper>

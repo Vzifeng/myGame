@@ -6,6 +6,8 @@ import com.example.game.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +18,10 @@ import java.util.Map;
  */
 @Service
 public class ClassServiceImpl implements ClassService {
+
     @Autowired
     ClassMapper classMapper;
+
     @Override
     public List<Map<String,Object>> classList() {
         List<Class> list = classMapper.classList();
@@ -29,6 +33,9 @@ public class ClassServiceImpl implements ClassService {
             for (Map.Entry <String, Object> entry : map.entrySet()) {
                 System.out.println("key:"+entry.getKey()+" and value:"+entry.getValue());
         }
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        System.out.println("时间:"+timestamp);
+
         return list2;
     }
 }

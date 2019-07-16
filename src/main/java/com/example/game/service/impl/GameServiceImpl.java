@@ -4,6 +4,8 @@ import com.example.game.common.Pager;
 import com.example.game.dao.GameMapper;
 import com.example.game.dao.GameMaterialMapper;
 import com.example.game.dao.UserGameMapper;
+import com.example.game.dataSource.DataSource;
+import com.example.game.dataSource.DataSourceType;
 import com.example.game.error.BusinessErrorEnum;
 import com.example.game.error.BusnessException;
 import com.example.game.po.Game;
@@ -126,5 +128,37 @@ public class GameServiceImpl implements GameService {
         map.put("deleteNum",num);
         map.put("errorMsg",stringBuffer.substring(0,stringBuffer.length()-1));
         return map;
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.SLAVE)
+    public List<Map<String,Object>> testDataSource() {
+        List<Map<String,Object>> list = null;
+        try {
+            list = gameMapper.testDataSource();
+        } catch (Exception e) {
+            LOGGER.error("错误",e);
+        }
+        for (Map<String,Object> map : list){
+            for (Map.Entry<String,Object> entry : map.entrySet()){
+                System.out.println(entry.getKey()+"---------"+entry.getValue());
+            }
+        }
+        return list;
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.MASTER)
+    public List<Game> testDataSource2() {
+        List<Game> list = null;
+        try {
+            list = gameMapper.testDataSource2();
+        } catch (Exception e) {
+            LOGGER.error("错误",e);
+        }
+        for (Game game : list){
+            System.out.println(game.toString());
+        }
+        return list;
     }
 }

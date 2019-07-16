@@ -62,4 +62,18 @@ public class GameController extends BaseController {
         Map<String, Object>  map = gameService.deleteGameById(ids);
         return CommonResponse.create(map);
     }
+
+    @RequestMapping(value = "/testDataSource",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResponse testDataSource(){
+        return CommonResponse.create(gameService.testDataSource());
+    }
+
+    @RequestMapping(value = "/testDataSource2",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResponse testDataSource2(){
+        return CommonResponse.create(gameService.testDataSource2());
+    }
+
+
 }

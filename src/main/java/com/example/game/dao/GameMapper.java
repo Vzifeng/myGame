@@ -5,6 +5,7 @@ import com.example.game.vo.GameVo;
 import com.example.game.vo.response.ResponseGameVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GameMapper {
     int deleteByPrimaryKey(Integer id);
@@ -24,4 +25,8 @@ public interface GameMapper {
     ResponseGameVo singlGame(Integer id);
 
     List <ResponseGameVo> selectGameByUserId(Integer userId);
+
+    List<Map<String,Object>> testDataSource();
+
+    List<Game> testDataSource2();
 }

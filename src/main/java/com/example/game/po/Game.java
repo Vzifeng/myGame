@@ -40,4 +40,9 @@ public class Game {
     public void setGamePublishTime(String gamePublishTime) {
         this.gamePublishTime = gamePublishTime == null ? null : gamePublishTime.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Game{" + "id=" + id + ", gameName='" + gameName + '\'' + ", gameCompany='" + gameCompany + '\'' + ", gamePublishTime='" + gamePublishTime + '\'' + '}';
+    }
 }
