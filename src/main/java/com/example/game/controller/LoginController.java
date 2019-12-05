@@ -4,6 +4,7 @@ import com.example.game.error.BusinessErrorEnum;
 import com.example.game.error.BusnessException;
 import com.example.game.po.User;
 import com.example.game.response.CommonResponse;
+import com.example.game.utils.EncodeByMd5Util;
 import com.example.game.utils.SessionUtil;
 import com.example.game.vo.MyVo;
 import org.apache.shiro.SecurityUtils;
@@ -77,10 +78,9 @@ public class LoginController {
          * 使用shrio编写认证操作
          */
         //获取subject
-       /* String name = (String) param.get("name");
-        String password = (String) param.get("password");*/
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(name,password);
+        String newPassword = EncodeByMd5Util.encodeByMd5(password);
+        UsernamePasswordToken token = new UsernamePasswordToken(name,newPassword);
 
         //String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
         //String parameter = httpServletRequest.getParameter("vrifyCode");

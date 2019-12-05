@@ -26,4 +26,6 @@ public interface GameService {
     List<Map<String,Object>> testDataSource();
 
     List<Game> testDataSource2();
+
+    List<Game> loadExcel(GameVo gameVo);
 }

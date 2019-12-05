@@ -131,6 +131,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public List <Game> loadExcel(GameVo gameVo) {
+        List<Game> list = gameMapper.gameListPage(gameVo);
+        return list;
+    }
+
+    @Override
     @DataSource(value = DataSourceType.SLAVE)
     public List<Map<String,Object>> testDataSource() {
         List<Map<String,Object>> list = null;
@@ -161,4 +167,6 @@ public class GameServiceImpl implements GameService {
         }
         return list;
     }
+
+
 }

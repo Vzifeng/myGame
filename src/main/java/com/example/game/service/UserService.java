@@ -7,6 +7,8 @@ import com.example.game.po.UserPassword;
 import com.example.game.vo.RegisterVo;
 import com.example.game.vo.UserVo;
 
+import java.util.Map;
+
 /**
  * @ Author   ：yangyunlong.
  * @ Date     ：Created in 16:57 2019/4/18
@@ -27,4 +29,6 @@ public interface UserService {
     UserPassword getPasswordByUserId(Integer id);
 
     Integer addGameforUser(String gameIds) throws BusnessException;
+
+    Integer testDelete(Map<String,Object> params);
 }

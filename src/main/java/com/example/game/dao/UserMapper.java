@@ -26,4 +26,6 @@ public interface UserMapper {
     List<UserVo> userList(RegisterVo registerVo);
 
     User selectUserByUserName(String userName);
+
+    int testDelete(Map<String,Object> params);
 }

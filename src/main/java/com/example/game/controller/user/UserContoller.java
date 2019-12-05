@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @ Author   ：yangyunlong.
  * @ Date     ：Created in 11:10 2019/2/19
@@ -82,6 +84,18 @@ public class UserContoller extends BaseController {
         Integer num = null;
         try {
             num = userService.addGameforUser(gameIds);
+        } catch (Exception e) {
+            LOGGER.error("新增游戏失败",e);
+        }
+        return CommonResponse.create(num);
+    }
+
+    @RequestMapping(value = "/testDelete",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResponse testDelete(@RequestBody Map<String,Object> params){
+        Integer num = null;
+        try {
+            num = userService.testDelete(params);
         } catch (Exception e) {
             LOGGER.error("新增游戏失败",e);
         }

@@ -28,6 +28,8 @@ public class UserVo {
 
     private String gameName;
 
+    private String companyAndDpartment;
+
     private List<ResponseGameVo> responseGameVoList;
 
 }

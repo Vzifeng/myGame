@@ -34,11 +34,11 @@ public class GameApplicationTests {
     @Test
     public void testExportWord2() throws Exception {
         String tmpFile = "classpath:template.doc";
-        String expFile = "D:/result.doc";
+        String expFile = "D:/result1.doc";
         Map<String, String> datas = new HashMap<String, String>();
         datas.put("title", "标题部份");
         datas.put("content", "这里是内容，测试使用POI导出到Word的内容！");
-        datas.put("author", "meimeiv");
+        datas.put("author", "妹妹v");
         datas.put("url", "http://www.baidu.com");
 
         build(ResourceUtils.getFile(tmpFile), datas, expFile);

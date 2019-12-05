@@ -3,6 +3,7 @@ package com.example.game.controller.game;
 import com.example.game.common.Pager;
 import com.example.game.controller.BaseController;
 import com.example.game.error.BusnessException;
+import com.example.game.po.Game;
 import com.example.game.response.CommonResponse;
 import com.example.game.service.GameService;
 import com.example.game.vo.GameVo;
@@ -11,8 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,11 +80,5 @@ public class GameController extends BaseController {
     public CommonResponse testDataSource2(){
         return CommonResponse.create(gameService.testDataSource2());
     }
-
-    //这是分支提交测试
-    //ceshi
-    //ceshi
-    //合并分支测试
-    //
 
 }

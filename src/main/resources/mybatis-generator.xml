@@ -57,7 +57,7 @@
             enableDeleteByExample="false" selectByExampleQueryId="false">
         </table>-->
 
-        <table tableName="user_role" domainObjectName="UserRole"
+        <table tableName="company" domainObjectName="Company"
                enableCountByExample="false" enableUpdateByExample="false" enableSelectByExample="false"
                enableDeleteByExample="false" selectByExampleQueryId="false">
         </table>

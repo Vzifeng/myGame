@@ -185,4 +185,10 @@ public class UserServiceImpl implements UserService {
         }
         return num;
     }
+
+    @Override
+    public Integer testDelete(Map <String, Object> params) {
+        int num = userMapper.testDelete(params);
+        return num;
+    }
 }

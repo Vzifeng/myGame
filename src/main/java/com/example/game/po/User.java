@@ -15,6 +15,8 @@ public class User implements Serializable {
 
     private String userRegistrationTime;
 
+    private Integer departmentId;
+
     public Integer getId() {
         return id;
     }
@@ -63,8 +65,16 @@ public class User implements Serializable {
         this.userRegistrationTime = userRegistrationTime == null ? null : userRegistrationTime.trim();
     }
 
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", userName='" + userName + '\'' + ", userSex=" + userSex + ", userPhone='" + userPhone + '\'' + ", userAddr='" + userAddr + '\'' + ", userRegistrationTime='" + userRegistrationTime + '\'' + '}';
+        return "User{" + "id=" + id + ", userName='" + userName + '\'' + ", userSex=" + userSex + ", userPhone='" + userPhone + '\'' + ", userAddr='" + userAddr + '\'' + ", userRegistrationTime='" + userRegistrationTime + '\'' + ", departmentId=" + departmentId + '}';
     }
 }

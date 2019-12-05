@@ -8,9 +8,10 @@
     <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
     <result column="user_addr" jdbcType="VARCHAR" property="userAddr" />
     <result column="user_registration_time" jdbcType="VARCHAR" property="userRegistrationTime" />
+      <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_name, user_sex, user_phone, user_addr, user_registration_time
+    id, user_name, user_sex, user_phone, user_addr, user_registration_time,department_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -24,10 +25,10 @@
   </delete>
   <insert id="insert" parameterType="com.example.game.po.User" keyProperty="id" useGeneratedKeys="true">
     insert into user (id, user_name, user_sex, 
-      user_phone, user_addr, user_registration_time
+      user_phone, user_addr, user_registration_time,department_id
       )
     values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userSex,jdbcType=BIT}, 
-      #{userPhone,jdbcType=VARCHAR}, #{userAddr,jdbcType=VARCHAR}, #{userRegistrationTime,jdbcType=VARCHAR}
+      #{userPhone,jdbcType=VARCHAR}, #{userAddr,jdbcType=VARCHAR}, #{userRegistrationTime,jdbcType=VARCHAR},#{departmentId,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.game.po.User" keyProperty="id" useGeneratedKeys="true">
@@ -51,6 +52,9 @@
       <if test="userRegistrationTime != null">
         user_registration_time,
       </if>
+      <if test="departmentId != null">
+          department_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -70,6 +74,9 @@
       </if>
       <if test="userRegistrationTime != null">
         #{userRegistrationTime,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+          #{departmentId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -91,6 +98,9 @@
       <if test="userRegistrationTime != null">
         user_registration_time = #{userRegistrationTime,jdbcType=VARCHAR},
       </if>
+        <if test="departmentId != null">
+            department_id = #{departmentId,jdbcType=INTEGER},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -120,12 +130,15 @@
         u.user_addr as userAddr,
         u.user_registration_time as userRegistrationTime,
         group_concat(DISTINCT r.role_name order by r.id) as roleName,
-        group_concat(DISTINCT g.game_name order by g.id) as gameName
+        group_concat(DISTINCT g.game_name order by g.id) as gameName,
+        concat(co.company_name,'/',de.department_name) as companyAndDpartment
       from user u
       left join user_role ur on ur.user_id = u.id
       left join role r on r.id = ur.role_id
       left join user_game ug on ug.user_id = u.id
       left join game g on g.id = ug.game_id
+      left join department de on u.department_id = de.id
+      left join company co on de.company_id = co.company_id
       where 1=1
       <if test="userName != null and userName !=''">
           and u.user_name like concat('%',#{userName},'%')
@@ -154,4 +167,14 @@
         u.user_addr as userAddr
       from user u where user_phone = #{userName}
   </select>
+
+    <delete id="testDelete" parameterType="map">
+        delete from aa1
+        <where>
+          id in
+          <foreach collection="ids" open="(" close=")" separator="," item="item">
+            #{item}
+          </foreach>
+        </where>
+    </delete>
 </mapper>

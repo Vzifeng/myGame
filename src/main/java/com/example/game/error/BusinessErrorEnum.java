@@ -18,6 +18,13 @@ public enum BusinessErrorEnum implements CommonError {
     GAME_NOT_EXIST(300001,"游戏不存在"),
     COULD_NOT_DELETE_GAME(300002,"该游戏无法删除"),
 
+    //token模块-验证模块-过期
+    TOKEN_VALIDATE_EXPIRED_ERROR (10200302,"token过期"),
+    //token模块-验证模块-验证失败
+    TOKEN_VALIDATE_FAIL_ERROR(10200303,"token验证失败"),
+    //token模块-验证模块-通用异常
+    TOKEN_VALIDATE_ERROR(10200399,"token通用异常"),
+
     ;
 
     private int errorCode;
